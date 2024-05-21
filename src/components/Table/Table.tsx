@@ -1,5 +1,4 @@
 import { Dispatch, MouseEvent } from "react";
-// import Square from "../Square/Square";
 import "./Table.css";
 import { RobotLocation } from "../../utils/types";
 
@@ -13,7 +12,7 @@ const Table = ({ canClick, robotLocation, setRobotLocation }: TableProps) => {
 	const getSquareLocationOnBrowswer = (e: MouseEvent) => {
 		const { x, y } = e.currentTarget.getBoundingClientRect();
 		let squareIndex = e.currentTarget.innerHTML.split(",").map(Number);
-		setRobotLocation({ ...robotLocation, location: squareIndex, left: x, top: y });
+		setRobotLocation({ ...robotLocation, direction: "south", location: squareIndex, left: x, top: y });
 	};
 
 	const createBoard = (rows: number, col: number) => {
@@ -24,14 +23,6 @@ const Table = ({ canClick, robotLocation, setRobotLocation }: TableProps) => {
 			for (let j = 0; j < col; j++) {
 				let index = [i, j];
 				tableRow.unshift(
-					// <Square
-					// 	key={`${i}-${j}`}
-					// 	index={[i, j]}
-					// 	canClick={canClick}
-					// 	setLocation={setLocation}
-					// 	getLocation={getSquareLocationOnBrowswer}
-					// 	onClick={canClick ? (e: MouseEvent) => getSquareLocationOnBrowswer(e) : undefined}
-					// />
 					<div
 						key={`square +${index}`}
 						className="square"
