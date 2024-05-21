@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, MouseEvent } from "react";
 import Table from "./components/Table/Table";
 import Button from "./components/Button/Button";
 import Robot from "./components/Robot/Robot";
-import robot from "./assets/robot_s.png";
+import robot_s from "./assets/robot_s.png";
+import robot_n from "./assets/robot_n.png";
+import robot_ne from "./assets/robot_ne.png";
+import robot_nw from "./assets/robot_nw.png";
+import robot_se from "./assets/robot_se.png";
+import robot_sw from "./assets/robot_sw.png";
+
 import { Direction, Index, RobotLocation } from "./utils/types";
 import "./App.css";
 
@@ -11,20 +17,83 @@ const INITIAL_ROBOTLOCATION = {
 	location: null,
 };
 
+const robotDirectionImages = {
+	north: robot_n,
+	south: robot_s,
+	west: robot_nw,
+	east: robot_se,
+};
+
 const App = () => {
 	const [robotLocation, setRobotLocation] = useState<RobotLocation | null>({ ...INITIAL_ROBOTLOCATION, left: 800, top: 200 });
-	console.log({ robotLocation });
 	const [canClick, setCanClick] = useState(false);
+	const directions = ["north", "east", "south", "west"];
+
+	useEffect(() => {
+		getRobotDirectionImage();
+	}, [robotLocation?.direction]);
+
+	const getRobotDirectionImage = () => {
+		return robotDirectionImages[robotLocation?.direction as Direction];
+	};
+
+	//TODO
+	const handleEndsOfDirectionArray = () => {};
+
+	//TODO
+	const isOnEdge = () => {};
 
 	const handlePlace = () => {
 		setCanClick(true);
 	};
 
-	const handleLeft = () => {
-		setRobotLocation((prevRobotLocation) => ({
-			...robotLocation,
-			left: (prevRobotLocation?.left || 0) + 120,
-		}));
+	const handleMove = () => {
+		console.log(robotLocation?.direction);
+		if (robotLocation?.direction === "north") {
+			setRobotLocation((prevRobotLocation) => ({
+				...robotLocation,
+				top: (prevRobotLocation?.top || 0) - 120,
+			}));
+		}
+		if (robotLocation?.direction === "east") {
+			setRobotLocation((prevRobotLocation) => ({
+				...robotLocation,
+				left: (prevRobotLocation?.left || 0) + 120,
+			}));
+		}
+		if (robotLocation?.direction === "south") {
+			setRobotLocation((prevRobotLocation) => ({
+				...robotLocation,
+				top: (prevRobotLocation?.top || 0) + 120,
+			}));
+		}
+		if (robotLocation?.direction === "west") {
+			setRobotLocation((prevRobotLocation) => ({
+				...robotLocation,
+				left: (prevRobotLocation?.left || 0) - 120,
+			}));
+		}
+	};
+
+	const handleChangeDirections = (e: MouseEvent<HTMLElement>) => {
+		let currentDirectionIndex: number;
+		let updatedDirection: string = "";
+		let directionChange = e.currentTarget.innerHTML.toLowerCase();
+		if (robotLocation?.direction) {
+			if (directionChange === "left") {
+				let currentDirection: string = robotLocation?.direction;
+				currentDirectionIndex = directions.indexOf(currentDirection);
+				updatedDirection = directions[currentDirectionIndex - 1];
+			} else if (directionChange === "right") {
+				let currentDirection: string = robotLocation?.direction;
+				currentDirectionIndex = directions.indexOf(currentDirection);
+				updatedDirection = directions[currentDirectionIndex + 1];
+			}
+			setRobotLocation((prevRobotLocation) => ({
+				...prevRobotLocation,
+				direction: updatedDirection as Direction,
+			}));
+		}
 	};
 
 	return (
@@ -32,11 +101,11 @@ const App = () => {
 			<div className="app-container">
 				<Table canClick={canClick} robotLocation={robotLocation} setRobotLocation={setRobotLocation} />
 				<div>
-					<Robot image={robot} x={robotLocation?.left} y={robotLocation?.top} />
+					<Robot image={getRobotDirectionImage() || robot_s} x={robotLocation?.left} y={robotLocation?.top} />
 					<div className="buttons-container">
-						<Button onClick={(e) => console.log(e.currentTarget.value)} text="Move" />
-						<Button onClick={handleLeft} text="Left" />
-						<Button onClick={(e) => console.log(e.currentTarget.value)} text="Right" />
+						<Button onClick={handleMove} text="Move" />
+						<Button onClick={(e) => handleChangeDirections(e)} text="Left" />
+						<Button onClick={(e) => handleChangeDirections(e)} text="Right" />
 						<Button onClick={handlePlace} text="Place" />
 						<Button onClick={(e) => console.log(e.currentTarget.value)} text="Report" />
 					</div>
