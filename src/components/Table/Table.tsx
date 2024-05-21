@@ -1,13 +1,45 @@
-import Square from "../Square/Square";
+import { Dispatch, MouseEvent } from "react";
+// import Square from "../Square/Square";
 import "./Table.css";
+import { RobotLocation } from "../../utils/types";
 
-const Table = () => {
+interface TableProps {
+	canClick: boolean;
+	robotLocation: RobotLocation | null;
+	setRobotLocation: Dispatch<React.SetStateAction<RobotLocation | null>>;
+}
+
+const Table = ({ canClick, robotLocation, setRobotLocation }: TableProps) => {
+	const getSquareLocationOnBrowswer = (e: MouseEvent) => {
+		const { x, y } = e.currentTarget.getBoundingClientRect();
+		let squareIndex = e.currentTarget.innerHTML.split(",").map(Number);
+		setRobotLocation({ ...robotLocation, location: squareIndex, left: x, top: y });
+	};
+
 	const createBoard = (rows: number, col: number) => {
+		console.log("draw");
 		let array2D = [];
 		for (let i = 0; i < rows; i++) {
 			let tableRow = [];
 			for (let j = 0; j < col; j++) {
-				tableRow.unshift(<Square key={`${i}-${j}`} index={[i, j]} />);
+				let index = [i, j];
+				tableRow.unshift(
+					// <Square
+					// 	key={`${i}-${j}`}
+					// 	index={[i, j]}
+					// 	canClick={canClick}
+					// 	setLocation={setLocation}
+					// 	getLocation={getSquareLocationOnBrowswer}
+					// 	onClick={canClick ? (e: MouseEvent) => getSquareLocationOnBrowswer(e) : undefined}
+					// />
+					<div
+						key={`square +${index}`}
+						className="square"
+						onClick={canClick ? (e: MouseEvent) => getSquareLocationOnBrowswer(e) : undefined}
+					>
+						{index.toString()}
+					</div>
+				);
 			}
 			array2D.push(
 				<div key={i} className="table-row">

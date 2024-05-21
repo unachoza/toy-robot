@@ -1,0 +1,5 @@
+.robot {
+	height: 6em;
+	padding: 1.5em;
+	transition: top 1s ease, left 1s ease;
+}
