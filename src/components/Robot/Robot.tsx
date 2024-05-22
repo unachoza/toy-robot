@@ -9,6 +9,7 @@ interface RobotProps {
 }
 
 const Robot = ({ image, x, y, location }: RobotProps) => {
+	console.log(x, y);
 	return (
 		<img
 			src={image}
@@ -25,5 +26,3 @@ const Robot = ({ image, x, y, location }: RobotProps) => {
 };
 
 export default Robot;
-
-// if robotoLocation.location is null add title?
