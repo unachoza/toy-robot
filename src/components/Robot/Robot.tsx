@@ -9,7 +9,6 @@ interface RobotProps {
 }
 
 const Robot = ({ image, x, y, location }: RobotProps) => {
-	console.log(x, y);
 	return (
 		<img
 			src={image}

@@ -13,7 +13,7 @@ import useScreenSize from "./utils/useScreenSize";
 import "./App.css";
 
 export const INITIAL_ROBOTLOCATION = {
-	direction: "north" as Direction,
+	direction: "south" as Direction,
 	location: null,
 	left: 50,
 	top: 10,
@@ -40,7 +40,6 @@ const App = () => {
 		getRobotDirectionImage();
 	}, [robotLocation.direction]);
 
-	// TODO, Fix how to get initial screensize to set initial squarepxSize, currently only getting screensize if resizing
 	useEffect(() => {
 		handleResize();
 		switch (screenSize) {
@@ -131,25 +130,21 @@ const App = () => {
 		toggling();
 		setModalText(INSTRUCTIONS);
 	};
-	console.log({ robotLocation });
-	console.log({ squarePxSize });
 	return (
-		<>
-			<div className="app-container">
-				<Table robotLocation={robotLocation} setRobotLocation={setRobotLocation} />
-				<div>
-					<Robot image={getRobotDirectionImage()} x={robotLocation.left} y={robotLocation.top} location={robotLocation.location || null} />
-					<div className="buttons-container">
-						<Button onClick={showInstructions} text="Instructions" />
-						<Button onClick={handleMove} text="Move" />
-						<Button onClick={(e) => handleChangeDirections(e)} text="Left" />
-						<Button onClick={(e) => handleChangeDirections(e)} text="Right" />
-						<Button onClick={handleReport} text="Report" />
-					</div>
-					{isOpen && <Modal toggling={toggling} content={modalText} />}
+		<div className="app-container">
+			<Table robotLocation={robotLocation} setRobotLocation={setRobotLocation} />
+			<div>
+				<Robot image={getRobotDirectionImage()} x={robotLocation.left} y={robotLocation.top} location={robotLocation.location || null} />
+				<div className="buttons-container">
+					<Button onClick={showInstructions} text="Instructions" />
+					<Button onClick={handleMove} text="Move" />
+					<Button onClick={(e) => handleChangeDirections(e)} text="Left" />
+					<Button onClick={(e) => handleChangeDirections(e)} text="Right" />
+					<Button onClick={handleReport} text="Report" />
 				</div>
+				{isOpen && <Modal toggling={toggling} content={modalText} />}
 			</div>
-		</>
+		</div>
 	);
 };
 
