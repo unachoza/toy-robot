@@ -84,17 +84,19 @@ const App = () => {
 	};
 
 	const handleChangeDirections = (e: MouseEvent<HTMLElement>) => {
-		let directionIndex: number = directions.indexOf(robotLocation.direction as string);
-		let directionChange = e.currentTarget.innerHTML.toLowerCase();
-		if (directionChange === "left") {
-			directionIndex = (directionIndex + 3) % 4;
-		} else if (directionChange === "right") {
-			directionIndex = (directionIndex + 1) % 4;
+		if (robotLocation.location) {
+			let directionIndex: number = directions.indexOf(robotLocation.direction as string);
+			let directionChange = e.currentTarget.innerHTML.toLowerCase();
+			if (directionChange === "left") {
+				directionIndex = (directionIndex + 3) % 4;
+			} else if (directionChange === "right") {
+				directionIndex = (directionIndex + 1) % 4;
+			}
+			setRobotLocation((prevRobotLocation) => ({
+				...prevRobotLocation,
+				direction: directions[directionIndex] as Direction,
+			}));
 		}
-		setRobotLocation((prevRobotLocation) => ({
-			...prevRobotLocation,
-			direction: directions[directionIndex] as Direction,
-		}));
 	};
 
 	const handleReport = () => {
