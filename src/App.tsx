@@ -12,7 +12,7 @@ import { Direction, RobotLocation } from "./utils/types";
 import useScreenSize from "./utils/useScreenSize";
 import "./App.css";
 
-const INITIAL_ROBOTLOCATION = {
+export const INITIAL_ROBOTLOCATION = {
 	direction: "north" as Direction,
 	location: null,
 	left: 50,
@@ -30,7 +30,7 @@ const App = () => {
 	const [robotLocation, setRobotLocation] = useState<RobotLocation>({ ...INITIAL_ROBOTLOCATION });
 	const [isOpen, setIsOpen] = useState(false);
 	const [modalText, setModalText] = useState<string>("");
-	const screenSize = useScreenSize();
+	const { screenSize, handleResize } = useScreenSize(setRobotLocation);
 	const [squarePxSize, setSquarePxSize] = useState(120);
 	const toggling = () => setIsOpen(!isOpen);
 	const directions = ["north", "east", "south", "west"];
@@ -40,7 +40,9 @@ const App = () => {
 		getRobotDirectionImage();
 	}, [robotLocation.direction]);
 
+	// TODO, Fix how to get initial screensize to set initial squarepxSize, currently only getting screensize if resizing
 	useEffect(() => {
+		handleResize();
 		switch (screenSize) {
 			case "L":
 				setSquarePxSize(120);
