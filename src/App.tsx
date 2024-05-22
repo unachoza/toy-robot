@@ -7,7 +7,7 @@ import robot_s from "./assets/robot_s.png";
 import robot_n from "./assets/robot_n.png";
 import robot_nw from "./assets/robot_nw.png";
 import robot_se from "./assets/robot_se.png";
-
+import { INSTRUCTIONS } from "./utils/constants";
 import { Direction, RobotLocation } from "./utils/types";
 import "./App.css";
 
@@ -26,6 +26,7 @@ const robotDirectionImages = {
 const App = () => {
 	const [robotLocation, setRobotLocation] = useState<RobotLocation | null>({ ...INITIAL_ROBOTLOCATION, left: 800, top: 200 });
 	const [isOpen, setIsOpen] = useState(false);
+	const [modalText, setModalText] = useState<string>("");
 	const toggling = () => setIsOpen(!isOpen);
 	const directions = ["north", "east", "south", "west"];
 	const tableSize = 5;
@@ -42,10 +43,7 @@ const App = () => {
 		return x >= 0 && x < tableSize && y >= 0 && y < tableSize;
 	};
 
-
 	const handleMove = () => {
-		console.log(robotLocation?.direction);
-		//
 		if (robotLocation?.location) {
 			let {
 				location: { x, y },
@@ -72,12 +70,12 @@ const App = () => {
 					break;
 			}
 			if (isValidMove(x, y)) {
-				setRobotLocation((prevRobotLocation) => ({
-					...prevRobotLocation,
+				setRobotLocation({
+					...robotLocation,
 					location: { x, y },
 					left,
 					top,
-				}));
+				});
 			}
 		}
 	};
@@ -97,7 +95,18 @@ const App = () => {
 	};
 
 	const handleReport = () => {
+		if (robotLocation?.location) {
+			const {
+				location: { x, y },
+				direction,
+			} = robotLocation;
+			toggling();
+			setModalText(`Robot is located at ${x},${y} and is facing ${direction?.toUpperCase()}`);
+		}
+	};
+	const showInstructions = () => {
 		toggling();
+		setModalText(INSTRUCTIONS);
 	};
 
 	return (
@@ -111,8 +120,9 @@ const App = () => {
 						<Button onClick={(e) => handleChangeDirections(e)} text="Left" />
 						<Button onClick={(e) => handleChangeDirections(e)} text="Right" />
 						<Button onClick={handleReport} text="Report" />
+						<Button onClick={showInstructions} text="Instructions" />
 					</div>
-					{isOpen && <Modal toggling={toggling} />}
+					{isOpen && <Modal toggling={toggling} content={modalText} />}
 				</div>
 			</div>
 		</>

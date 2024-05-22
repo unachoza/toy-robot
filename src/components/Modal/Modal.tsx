@@ -1,9 +1,10 @@
 import { MouseEventHandler } from "react";
+import ReactMarkdown from "react-markdown";
 import "./Modal.css";
 
 interface ModalProps {
 	toggling: MouseEventHandler<HTMLImageElement>;
-	content?: string;
+	content: string;
 }
 
 const Modal = ({ toggling, content }: ModalProps) => {
@@ -17,8 +18,8 @@ const Modal = ({ toggling, content }: ModalProps) => {
 						onClick={toggling}
 						alt="close icon"
 					/>
-					<div className="modal-header">Report</div>
-					{/* <div className="modal-content">{content}</div> */}
+					{content?.length < 200 && <div className="modal-header">Report</div>}
+					<ReactMarkdown className="modal-content">{content}</ReactMarkdown>
 				</div>
 			</div>
 		</div>

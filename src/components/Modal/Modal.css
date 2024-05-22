@@ -19,7 +19,7 @@
 	background: #fff;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 	max-width: 95%;
-	width: 500px;
+	width: 550px;
 	animation: modalopen 1s;
 }
 
@@ -43,9 +43,9 @@
 }
 
 .modal-header {
-	background: var(--primary-color);
 	color: black;
-	padding: 15px;
+	font-size: 20px;
+	padding: 20px 0px 0px 20px;
 }
 
 h3 {
