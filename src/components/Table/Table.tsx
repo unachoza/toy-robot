@@ -3,17 +3,16 @@ import "./Table.css";
 import { RobotLocation } from "../../utils/types";
 
 interface TableProps {
-	canClick: boolean;
 	robotLocation: RobotLocation | null;
 	setRobotLocation: Dispatch<React.SetStateAction<RobotLocation | null>>;
 }
 
-const Table = ({ canClick, robotLocation, setRobotLocation }: TableProps) => {
-	const getSquareLocationOnBrowswer = (e: MouseEvent) => {
+const Table = ({ robotLocation, setRobotLocation }: TableProps) => {
+	const getSquareLocationOnBrowswer = (e: MouseEvent, xPosition: number, yPosition: number) => {
 		const { x, y } = e.currentTarget.getBoundingClientRect();
-		let squareIndex = e.currentTarget.innerHTML.split(",").map(Number);
-		console.log({ squareIndex });
-		setRobotLocation({ ...robotLocation, direction: "south", location: { x: squareIndex[0], y: squareIndex[1] }, left: x, top: y });
+		//check if first time placed on table
+		//******TODO MUST CHANGE BACK ROBOT TO NORTH FROM SOUTH****************
+		setRobotLocation({ ...robotLocation, direction: "south", location: { x: xPosition, y: yPosition }, left: x, top: y });
 	};
 
 	const createBoard = (rows: number, col: number) => {
@@ -24,11 +23,7 @@ const Table = ({ canClick, robotLocation, setRobotLocation }: TableProps) => {
 			for (let j = 0; j < col; j++) {
 				let index = [i, j];
 				tableRow.unshift(
-					<div
-						key={`square +${index}`}
-						className="square"
-						onClick={canClick ? (e: MouseEvent) => getSquareLocationOnBrowswer(e) : undefined}
-					>
+					<div key={`square +${index}`} className="square" onClick={(e: MouseEvent) => getSquareLocationOnBrowswer(e, i, j)}>
 						{index.toString()}
 					</div>
 				);

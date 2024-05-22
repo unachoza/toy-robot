@@ -7,7 +7,7 @@ import robot_n from "./assets/robot_n.png";
 import robot_nw from "./assets/robot_nw.png";
 import robot_se from "./assets/robot_se.png";
 
-import { Direction, Index, RobotLocation } from "./utils/types";
+import { Direction, RobotLocation } from "./utils/types";
 import "./App.css";
 
 const INITIAL_ROBOTLOCATION = {
@@ -24,7 +24,6 @@ const robotDirectionImages = {
 
 const App = () => {
 	const [robotLocation, setRobotLocation] = useState<RobotLocation | null>({ ...INITIAL_ROBOTLOCATION, left: 800, top: 200 });
-	const [canClick, setCanClick] = useState(false);
 	const directions = ["north", "east", "south", "west"];
 	const tableSize = 5;
 
@@ -40,64 +39,44 @@ const App = () => {
 		return x >= 0 && x < tableSize && y >= 0 && y < tableSize;
 	};
 
-	const handlePlace = () => {
-		setCanClick(true);
-	};
-
 	const handleMove = () => {
 		console.log(robotLocation?.direction);
+		//
 		if (robotLocation?.location) {
 			let {
 				location: { x, y },
 				direction,
+				top,
+				left,
 			} = robotLocation;
 			switch (direction) {
 				case "north":
 					y += 1;
+					top ? (top -= 120) : 0;
 					break;
 				case "south":
 					y -= 1;
+					top ? (top += 120) : 0;
 					break;
 				case "east":
 					x += 1;
+					left ? (left += 120) : 0;
 					break;
 				case "west":
 					x -= 1;
+					left ? (left -= 120) : 0;
 					break;
 			}
 			if (isValidMove(x, y)) {
-				setRobotLocation({
-					...robotLocation,
+				setRobotLocation((prevRobotLocation) => ({
+					...prevRobotLocation,
 					location: { x, y },
-				});
+					left,
+					top,
+				}));
 			}
 		}
 	};
-	// if (robotLocation?.direction === "north") {
-	// 	setRobotLocation((prevRobotLocation) => ({
-	// 		...robotLocation,
-	// 		top: (prevRobotLocation?.top || 0) - 120,
-	// 	}));
-	// }
-	// if (robotLocation?.direction === "east") {
-	// 	setRobotLocation((prevRobotLocation) => ({
-	// 		...robotLocation,
-	// 		left: (prevRobotLocation?.left || 0) + 120,
-	// 	}));
-	// }
-	// if (robotLocation?.direction === "south") {
-	// 	setRobotLocation((prevRobotLocation) => ({
-	// 		...robotLocation,
-	// 		top: (prevRobotLocation?.top || 0) + 120,
-	// 	}));
-	// }
-	// if (robotLocation?.direction === "west") {
-	// 	setRobotLocation((prevRobotLocation) => ({
-	// 		...robotLocation,
-	// 		left: (prevRobotLocation?.left || 0) - 120,
-	// 	}));
-	// }
-	// };
 
 	const handleChangeDirections = (e: MouseEvent<HTMLElement>) => {
 		let directionIndex: number = directions.indexOf(robotLocation?.direction as string);
@@ -116,14 +95,13 @@ const App = () => {
 	return (
 		<>
 			<div className="app-container">
-				<Table canClick={canClick} robotLocation={robotLocation} setRobotLocation={setRobotLocation} />
+				<Table robotLocation={robotLocation} setRobotLocation={setRobotLocation} />
 				<div>
 					<Robot image={getRobotDirectionImage() || robot_s} x={robotLocation?.left} y={robotLocation?.top} />
 					<div className="buttons-container">
 						<Button onClick={handleMove} text="Move" />
 						<Button onClick={(e) => handleChangeDirections(e)} text="Left" />
 						<Button onClick={(e) => handleChangeDirections(e)} text="Right" />
-						<Button onClick={handlePlace} text="Place" />
 						<Button onClick={(e) => console.log(e.currentTarget.value)} text="Report" />
 					</div>
 				</div>
