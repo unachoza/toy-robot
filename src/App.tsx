@@ -30,6 +30,7 @@ const App = () => {
 	const toggling = () => setIsOpen(!isOpen);
 	const directions = ["north", "east", "south", "west"];
 	const tableSize = 5;
+	const squarePxSize = 120;
 
 	useEffect(() => {
 		getRobotDirectionImage();
@@ -54,19 +55,19 @@ const App = () => {
 			switch (direction) {
 				case "north":
 					y += 1;
-					top ? (top -= 120) : 0;
+					top && (top -= squarePxSize);
 					break;
 				case "south":
 					y -= 1;
-					top ? (top += 120) : 0;
+					top && (top += squarePxSize);
 					break;
 				case "east":
 					x += 1;
-					left ? (left += 120) : 0;
+					left && (left += squarePxSize);
 					break;
 				case "west":
 					x -= 1;
-					left ? (left -= 120) : 0;
+					left && (left -= squarePxSize);
 					break;
 			}
 			if (isValidMove(x, y)) {

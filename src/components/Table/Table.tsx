@@ -12,7 +12,7 @@ const Table = ({ robotLocation, setRobotLocation }: TableProps) => {
 		const { x, y } = e.currentTarget.getBoundingClientRect();
 		//check if first time placed on table
 		//******TODO MUST CHANGE BACK ROBOT TO NORTH FROM SOUTH****************
-		setRobotLocation({ ...robotLocation, direction: "south", location: { x: xPosition, y: yPosition }, left: x, top: y });
+		setRobotLocation({ ...robotLocation, direction: "north", location: { x: xPosition, y: yPosition }, left: x, top: y });
 	};
 
 	const createBoard = (rows: number, col: number) => {
