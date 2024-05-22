@@ -19,8 +19,10 @@
 .modal {
 	background: #fff;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-	max-width: 95%;
+	max-width: 90%;
 	width: 550px;
+	max-height: 80%;
+	overflow: scroll;
 	animation: modalopen 1s;
 }
 
