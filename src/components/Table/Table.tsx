@@ -8,10 +8,11 @@ interface TableProps {
 }
 
 const Table = ({ robotLocation, setRobotLocation }: TableProps) => {
-	const getSquareLocationOnBrowswer = (e: MouseEvent) => {
+	const getSquareLocationOnBrowswer = (e: MouseEvent, xPosition: number, yPosition: number) => {
 		const { x, y } = e.currentTarget.getBoundingClientRect();
-		let squareIndex = e.currentTarget.innerHTML.split(",").map(Number);
-		setRobotLocation({ ...robotLocation, direction: "south", location: squareIndex, left: x, top: y });
+		//check if first time placed on table
+		//******TODO MUST CHANGE BACK ROBOT TO NORTH FROM SOUTH****************
+		setRobotLocation({ ...robotLocation, direction: "south", location: { x: xPosition, y: yPosition }, left: x, top: y });
 	};
 
 	const createBoard = (rows: number, col: number) => {
@@ -22,7 +23,7 @@ const Table = ({ robotLocation, setRobotLocation }: TableProps) => {
 			for (let j = 0; j < col; j++) {
 				let index = [i, j];
 				tableRow.unshift(
-					<div key={`square +${index}`} className="square" onClick={(e: MouseEvent) => getSquareLocationOnBrowswer(e)}>
+					<div key={`square +${index}`} className="square" onClick={(e: MouseEvent) => getSquareLocationOnBrowswer(e, i, j)}>
 						{index.toString()}
 					</div>
 				);

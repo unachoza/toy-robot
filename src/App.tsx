@@ -8,7 +8,7 @@ import robot_n from "./assets/robot_n.png";
 import robot_nw from "./assets/robot_nw.png";
 import robot_se from "./assets/robot_se.png";
 
-import { Direction, Index, RobotLocation } from "./utils/types";
+import { Direction, RobotLocation } from "./utils/types";
 import "./App.css";
 
 const INITIAL_ROBOTLOCATION = {
@@ -28,6 +28,7 @@ const App = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const toggling = () => setIsOpen(!isOpen);
 	const directions = ["north", "east", "south", "west"];
+	const tableSize = 5;
 
 	useEffect(() => {
 		getRobotDirectionImage();
@@ -37,59 +38,62 @@ const App = () => {
 		return robotDirectionImages[robotLocation?.direction as Direction];
 	};
 
-	//TODO
-	const handleEndsOfDirectionArray = () => {};
+	const isValidMove = (x: number, y: number): boolean => {
+		return x >= 0 && x < tableSize && y >= 0 && y < tableSize;
+	};
 
-	//TODO
-	const isOnEdge = () => {};
 
 	const handleMove = () => {
 		console.log(robotLocation?.direction);
-		if (robotLocation?.direction === "north") {
-			setRobotLocation((prevRobotLocation) => ({
-				...robotLocation,
-				top: (prevRobotLocation?.top || 0) - 120,
-			}));
-		}
-		if (robotLocation?.direction === "east") {
-			setRobotLocation((prevRobotLocation) => ({
-				...robotLocation,
-				left: (prevRobotLocation?.left || 0) + 120,
-			}));
-		}
-		if (robotLocation?.direction === "south") {
-			setRobotLocation((prevRobotLocation) => ({
-				...robotLocation,
-				top: (prevRobotLocation?.top || 0) + 120,
-			}));
-		}
-		if (robotLocation?.direction === "west") {
-			setRobotLocation((prevRobotLocation) => ({
-				...robotLocation,
-				left: (prevRobotLocation?.left || 0) - 120,
-			}));
+		//
+		if (robotLocation?.location) {
+			let {
+				location: { x, y },
+				direction,
+				top,
+				left,
+			} = robotLocation;
+			switch (direction) {
+				case "north":
+					y += 1;
+					top ? (top -= 120) : 0;
+					break;
+				case "south":
+					y -= 1;
+					top ? (top += 120) : 0;
+					break;
+				case "east":
+					x += 1;
+					left ? (left += 120) : 0;
+					break;
+				case "west":
+					x -= 1;
+					left ? (left -= 120) : 0;
+					break;
+			}
+			if (isValidMove(x, y)) {
+				setRobotLocation((prevRobotLocation) => ({
+					...prevRobotLocation,
+					location: { x, y },
+					left,
+					top,
+				}));
+			}
 		}
 	};
 
 	const handleChangeDirections = (e: MouseEvent<HTMLElement>) => {
-		let currentDirectionIndex: number;
-		let updatedDirection: string = "";
+		let directionIndex: number = directions.indexOf(robotLocation?.direction as string);
 		let directionChange = e.currentTarget.innerHTML.toLowerCase();
-		if (robotLocation?.direction) {
-			if (directionChange === "left") {
-				let currentDirection: string = robotLocation?.direction;
-				currentDirectionIndex = directions.indexOf(currentDirection);
-				updatedDirection = directions[currentDirectionIndex - 1];
-			} else if (directionChange === "right") {
-				let currentDirection: string = robotLocation?.direction;
-				currentDirectionIndex = directions.indexOf(currentDirection);
-				updatedDirection = directions[currentDirectionIndex + 1];
-			}
-			setRobotLocation((prevRobotLocation) => ({
-				...prevRobotLocation,
-				direction: updatedDirection as Direction,
-			}));
+		if (directionChange === "left") {
+			directionIndex = (directionIndex + 3) % 4;
+		} else if (directionChange === "right") {
+			directionIndex = (directionIndex + 1) % 4;
 		}
+		setRobotLocation((prevRobotLocation) => ({
+			...prevRobotLocation,
+			direction: directions[directionIndex] as Direction,
+		}));
 	};
 
 	const handleReport = () => {
