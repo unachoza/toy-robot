@@ -4,10 +4,8 @@ import Button from "./components/Button/Button";
 import Robot from "./components/Robot/Robot";
 import robot_s from "./assets/robot_s.png";
 import robot_n from "./assets/robot_n.png";
-import robot_ne from "./assets/robot_ne.png";
 import robot_nw from "./assets/robot_nw.png";
 import robot_se from "./assets/robot_se.png";
-import robot_sw from "./assets/robot_sw.png";
 
 import { Direction, Index, RobotLocation } from "./utils/types";
 import "./App.css";
@@ -28,6 +26,7 @@ const App = () => {
 	const [robotLocation, setRobotLocation] = useState<RobotLocation | null>({ ...INITIAL_ROBOTLOCATION, left: 800, top: 200 });
 	const [canClick, setCanClick] = useState(false);
 	const directions = ["north", "east", "south", "west"];
+	const tableSize = 5;
 
 	useEffect(() => {
 		getRobotDirectionImage();
@@ -38,10 +37,9 @@ const App = () => {
 	};
 
 	//TODO
-	const handleEndsOfDirectionArray = () => {};
-
-	//TODO
-	const isOnEdge = () => {};
+	const isValidMove = (x: number, y: number): boolean => {
+		return x >= 0 && x < tableSize && y >= 0 && y < tableSize;
+	};
 
 	const handlePlace = () => {
 		setCanClick(true);
@@ -76,24 +74,17 @@ const App = () => {
 	};
 
 	const handleChangeDirections = (e: MouseEvent<HTMLElement>) => {
-		let currentDirectionIndex: number;
-		let updatedDirection: string = "";
+		let directionIndex: number = directions.indexOf(robotLocation?.direction as string);
 		let directionChange = e.currentTarget.innerHTML.toLowerCase();
-		if (robotLocation?.direction) {
-			if (directionChange === "left") {
-				let currentDirection: string = robotLocation?.direction;
-				currentDirectionIndex = directions.indexOf(currentDirection);
-				updatedDirection = directions[currentDirectionIndex - 1];
-			} else if (directionChange === "right") {
-				let currentDirection: string = robotLocation?.direction;
-				currentDirectionIndex = directions.indexOf(currentDirection);
-				updatedDirection = directions[currentDirectionIndex + 1];
-			}
-			setRobotLocation((prevRobotLocation) => ({
-				...prevRobotLocation,
-				direction: updatedDirection as Direction,
-			}));
+		if (directionChange === "left") {
+			directionIndex = (directionIndex + 3) % 4;
+		} else if (directionChange === "right") {
+			directionIndex = (directionIndex + 1) % 4;
 		}
+		setRobotLocation((prevRobotLocation) => ({
+			...prevRobotLocation,
+			direction: directions[directionIndex] as Direction,
+		}));
 	};
 
 	return (
