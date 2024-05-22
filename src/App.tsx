@@ -25,7 +25,6 @@ const robotDirectionImages = {
 
 const App = () => {
 	const [robotLocation, setRobotLocation] = useState<RobotLocation | null>({ ...INITIAL_ROBOTLOCATION, left: 800, top: 200 });
-	const [canClick, setCanClick] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
 	const toggling = () => setIsOpen(!isOpen);
 	const directions = ["north", "east", "south", "west"];
@@ -43,10 +42,6 @@ const App = () => {
 
 	//TODO
 	const isOnEdge = () => {};
-
-	const handlePlace = () => {
-		setCanClick(true);
-	};
 
 	const handleMove = () => {
 		console.log(robotLocation?.direction);
@@ -104,14 +99,13 @@ const App = () => {
 	return (
 		<>
 			<div className="app-container">
-				<Table canClick={canClick} robotLocation={robotLocation} setRobotLocation={setRobotLocation} />
+				<Table robotLocation={robotLocation} setRobotLocation={setRobotLocation} />
 				<div>
 					<Robot image={getRobotDirectionImage() || robot_s} x={robotLocation?.left} y={robotLocation?.top} />
 					<div className="buttons-container">
 						<Button onClick={handleMove} text="Move" />
 						<Button onClick={(e) => handleChangeDirections(e)} text="Left" />
 						<Button onClick={(e) => handleChangeDirections(e)} text="Right" />
-						<Button onClick={handlePlace} text="Place" />
 						<Button onClick={handleReport} text="Report" />
 					</div>
 					{isOpen && <Modal toggling={toggling} />}

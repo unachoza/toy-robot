@@ -3,12 +3,11 @@ import "./Table.css";
 import { RobotLocation } from "../../utils/types";
 
 interface TableProps {
-	canClick: boolean;
 	robotLocation: RobotLocation | null;
 	setRobotLocation: Dispatch<React.SetStateAction<RobotLocation | null>>;
 }
 
-const Table = ({ canClick, robotLocation, setRobotLocation }: TableProps) => {
+const Table = ({ robotLocation, setRobotLocation }: TableProps) => {
 	const getSquareLocationOnBrowswer = (e: MouseEvent) => {
 		const { x, y } = e.currentTarget.getBoundingClientRect();
 		let squareIndex = e.currentTarget.innerHTML.split(",").map(Number);
@@ -23,11 +22,7 @@ const Table = ({ canClick, robotLocation, setRobotLocation }: TableProps) => {
 			for (let j = 0; j < col; j++) {
 				let index = [i, j];
 				tableRow.unshift(
-					<div
-						key={`square +${index}`}
-						className="square"
-						onClick={canClick ? (e: MouseEvent) => getSquareLocationOnBrowswer(e) : undefined}
-					>
+					<div key={`square +${index}`} className="square" onClick={(e: MouseEvent) => getSquareLocationOnBrowswer(e)}>
 						{index.toString()}
 					</div>
 				);
