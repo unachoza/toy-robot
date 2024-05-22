@@ -12,7 +12,8 @@ const Table = ({ canClick, robotLocation, setRobotLocation }: TableProps) => {
 	const getSquareLocationOnBrowswer = (e: MouseEvent) => {
 		const { x, y } = e.currentTarget.getBoundingClientRect();
 		let squareIndex = e.currentTarget.innerHTML.split(",").map(Number);
-		setRobotLocation({ ...robotLocation, direction: "south", location: squareIndex, left: x, top: y });
+		console.log({ squareIndex });
+		setRobotLocation({ ...robotLocation, direction: "south", location: { x: squareIndex[0], y: squareIndex[1] }, left: x, top: y });
 	};
 
 	const createBoard = (rows: number, col: number) => {

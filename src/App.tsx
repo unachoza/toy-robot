@@ -36,7 +36,6 @@ const App = () => {
 		return robotDirectionImages[robotLocation?.direction as Direction];
 	};
 
-	//TODO
 	const isValidMove = (x: number, y: number): boolean => {
 		return x >= 0 && x < tableSize && y >= 0 && y < tableSize;
 	};
@@ -47,31 +46,58 @@ const App = () => {
 
 	const handleMove = () => {
 		console.log(robotLocation?.direction);
-		if (robotLocation?.direction === "north") {
-			setRobotLocation((prevRobotLocation) => ({
-				...robotLocation,
-				top: (prevRobotLocation?.top || 0) - 120,
-			}));
-		}
-		if (robotLocation?.direction === "east") {
-			setRobotLocation((prevRobotLocation) => ({
-				...robotLocation,
-				left: (prevRobotLocation?.left || 0) + 120,
-			}));
-		}
-		if (robotLocation?.direction === "south") {
-			setRobotLocation((prevRobotLocation) => ({
-				...robotLocation,
-				top: (prevRobotLocation?.top || 0) + 120,
-			}));
-		}
-		if (robotLocation?.direction === "west") {
-			setRobotLocation((prevRobotLocation) => ({
-				...robotLocation,
-				left: (prevRobotLocation?.left || 0) - 120,
-			}));
+		if (robotLocation?.location) {
+			let {
+				location: { x, y },
+				direction,
+			} = robotLocation;
+			switch (direction) {
+				case "north":
+					y += 1;
+					break;
+				case "south":
+					y -= 1;
+					break;
+				case "east":
+					x += 1;
+					break;
+				case "west":
+					x -= 1;
+					break;
+			}
+			if (isValidMove(x, y)) {
+				setRobotLocation({
+					...robotLocation,
+					location: { x, y },
+				});
+			}
 		}
 	};
+	// if (robotLocation?.direction === "north") {
+	// 	setRobotLocation((prevRobotLocation) => ({
+	// 		...robotLocation,
+	// 		top: (prevRobotLocation?.top || 0) - 120,
+	// 	}));
+	// }
+	// if (robotLocation?.direction === "east") {
+	// 	setRobotLocation((prevRobotLocation) => ({
+	// 		...robotLocation,
+	// 		left: (prevRobotLocation?.left || 0) + 120,
+	// 	}));
+	// }
+	// if (robotLocation?.direction === "south") {
+	// 	setRobotLocation((prevRobotLocation) => ({
+	// 		...robotLocation,
+	// 		top: (prevRobotLocation?.top || 0) + 120,
+	// 	}));
+	// }
+	// if (robotLocation?.direction === "west") {
+	// 	setRobotLocation((prevRobotLocation) => ({
+	// 		...robotLocation,
+	// 		left: (prevRobotLocation?.left || 0) - 120,
+	// 	}));
+	// }
+	// };
 
 	const handleChangeDirections = (e: MouseEvent<HTMLElement>) => {
 		let directionIndex: number = directions.indexOf(robotLocation?.direction as string);
