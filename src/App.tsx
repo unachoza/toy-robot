@@ -2,12 +2,11 @@ import { useState, useEffect, MouseEvent } from "react";
 import Table from "./components/Table/Table";
 import Button from "./components/Button/Button";
 import Robot from "./components/Robot/Robot";
+import Modal from "./components/Modal/Modal";
 import robot_s from "./assets/robot_s.png";
 import robot_n from "./assets/robot_n.png";
-import robot_ne from "./assets/robot_ne.png";
 import robot_nw from "./assets/robot_nw.png";
 import robot_se from "./assets/robot_se.png";
-import robot_sw from "./assets/robot_sw.png";
 
 import { Direction, Index, RobotLocation } from "./utils/types";
 import "./App.css";
@@ -27,6 +26,8 @@ const robotDirectionImages = {
 const App = () => {
 	const [robotLocation, setRobotLocation] = useState<RobotLocation | null>({ ...INITIAL_ROBOTLOCATION, left: 800, top: 200 });
 	const [canClick, setCanClick] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
+	const toggling = () => setIsOpen(!isOpen);
 	const directions = ["north", "east", "south", "west"];
 
 	useEffect(() => {
@@ -96,6 +97,10 @@ const App = () => {
 		}
 	};
 
+	const handleReport = () => {
+		toggling();
+	};
+
 	return (
 		<>
 			<div className="app-container">
@@ -107,8 +112,9 @@ const App = () => {
 						<Button onClick={(e) => handleChangeDirections(e)} text="Left" />
 						<Button onClick={(e) => handleChangeDirections(e)} text="Right" />
 						<Button onClick={handlePlace} text="Place" />
-						<Button onClick={(e) => console.log(e.currentTarget.value)} text="Report" />
+						<Button onClick={handleReport} text="Report" />
 					</div>
+					{isOpen && <Modal toggling={toggling} />}
 				</div>
 			</div>
 		</>
