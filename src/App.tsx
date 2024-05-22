@@ -1,4 +1,5 @@
-import { useState, useEffect, MouseEvent } from "react";
+import { useState, useEffect, useContext, MouseEvent } from "react";
+import { RobotContext } from "./context/RobotContext";
 import Table from "./components/Table/Table";
 import Button from "./components/Button/Button";
 import Robot from "./components/Robot/Robot";
@@ -8,15 +9,7 @@ import robot_n from "./assets/robot_n.png";
 import robot_nw from "./assets/robot_nw.png";
 import robot_se from "./assets/robot_se.png";
 import { INSTRUCTIONS } from "./utils/constants";
-import { Direction, RobotLocation } from "./utils/types";
 import "./App.css";
-
-const INITIAL_ROBOTLOCATION = {
-	direction: "north" as Direction,
-	location: null,
-	left: 40,
-	top: 10,
-};
 
 const robotDirectionImages = {
 	north: robot_n,
@@ -26,13 +19,14 @@ const robotDirectionImages = {
 };
 
 const App = () => {
-	const [robotLocation, setRobotLocation] = useState<RobotLocation>({ ...INITIAL_ROBOTLOCATION });
+	const context = useContext(RobotContext);
+	if (!context) {
+		throw new Error("RobotContext must be used within a RobotProvider");
+	}
+	const { robotLocation, handleMove, handleChangeDirections } = context;
 	const [isOpen, setIsOpen] = useState(false);
 	const [modalText, setModalText] = useState<string>("");
 	const toggling = () => setIsOpen(!isOpen);
-	const directions = ["north", "east", "south", "west"];
-	const tableSize = 5;
-	const squarePxSize = 120;
 
 	useEffect(() => {
 		getRobotDirectionImage();
@@ -40,63 +34,6 @@ const App = () => {
 
 	const getRobotDirectionImage = () => {
 		return robotDirectionImages[robotLocation.direction];
-	};
-
-	const isValidMove = (x: number, y: number): boolean => {
-		return x >= 0 && x < tableSize && y >= 0 && y < tableSize;
-	};
-
-	const handleMove = () => {
-		if (robotLocation?.location) {
-			let {
-				location: { x, y },
-				direction,
-				top,
-				left,
-			} = robotLocation;
-			switch (direction) {
-				case "north":
-					y += 1;
-					top -= squarePxSize;
-					break;
-				case "south":
-					y -= 1;
-					top += squarePxSize;
-					break;
-				case "east":
-					x += 1;
-					left += squarePxSize;
-					break;
-				case "west":
-					x -= 1;
-					left -= squarePxSize;
-					break;
-			}
-			if (isValidMove(x, y)) {
-				setRobotLocation({
-					...robotLocation,
-					location: { x, y },
-					left,
-					top,
-				});
-			}
-		}
-	};
-
-	const handleChangeDirections = (e: MouseEvent<HTMLElement>) => {
-		if (robotLocation.location) {
-			let directionIndex: number = directions.indexOf(robotLocation.direction as string);
-			let directionChange = e.currentTarget.innerHTML.toLowerCase();
-			if (directionChange === "left") {
-				directionIndex = (directionIndex + 3) % 4;
-			} else if (directionChange === "right") {
-				directionIndex = (directionIndex + 1) % 4;
-			}
-			setRobotLocation((prevRobotLocation) => ({
-				...prevRobotLocation,
-				direction: directions[directionIndex] as Direction,
-			}));
-		}
 	};
 
 	const handleReport = () => {
@@ -117,9 +54,9 @@ const App = () => {
 	return (
 		<>
 			<div className="app-container">
-				<Table robotLocation={robotLocation} setRobotLocation={setRobotLocation} />
+				<Table />
 				<div>
-					<Robot image={getRobotDirectionImage()} x={robotLocation.left} y={robotLocation.top} location={robotLocation.location || null} />
+					<Robot image={getRobotDirectionImage()} />
 					<div className="buttons-container">
 						<Button onClick={showInstructions} text="Instructions" />
 						<Button onClick={handleMove} text="Move" />
