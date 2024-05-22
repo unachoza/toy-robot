@@ -12,8 +12,10 @@ import { Direction, RobotLocation } from "./utils/types";
 import "./App.css";
 
 const INITIAL_ROBOTLOCATION = {
-	direction: null,
+	direction: "north" as Direction,
 	location: null,
+	left: 40,
+	top: 10,
 };
 
 const robotDirectionImages = {
@@ -24,7 +26,7 @@ const robotDirectionImages = {
 };
 
 const App = () => {
-	const [robotLocation, setRobotLocation] = useState<RobotLocation | null>({ ...INITIAL_ROBOTLOCATION, left: 800, top: 200 });
+	const [robotLocation, setRobotLocation] = useState<RobotLocation>({ ...INITIAL_ROBOTLOCATION });
 	const [isOpen, setIsOpen] = useState(false);
 	const [modalText, setModalText] = useState<string>("");
 	const toggling = () => setIsOpen(!isOpen);
@@ -34,10 +36,10 @@ const App = () => {
 
 	useEffect(() => {
 		getRobotDirectionImage();
-	}, [robotLocation?.direction]);
+	}, [robotLocation.direction]);
 
 	const getRobotDirectionImage = () => {
-		return robotDirectionImages[robotLocation?.direction as Direction];
+		return robotDirectionImages[robotLocation.direction];
 	};
 
 	const isValidMove = (x: number, y: number): boolean => {
@@ -55,19 +57,19 @@ const App = () => {
 			switch (direction) {
 				case "north":
 					y += 1;
-					top && (top -= squarePxSize);
+					top -= squarePxSize;
 					break;
 				case "south":
 					y -= 1;
-					top && (top += squarePxSize);
+					top += squarePxSize;
 					break;
 				case "east":
 					x += 1;
-					left && (left += squarePxSize);
+					left += squarePxSize;
 					break;
 				case "west":
 					x -= 1;
-					left && (left -= squarePxSize);
+					left -= squarePxSize;
 					break;
 			}
 			if (isValidMove(x, y)) {
@@ -82,7 +84,7 @@ const App = () => {
 	};
 
 	const handleChangeDirections = (e: MouseEvent<HTMLElement>) => {
-		let directionIndex: number = directions.indexOf(robotLocation?.direction as string);
+		let directionIndex: number = directions.indexOf(robotLocation.direction as string);
 		let directionChange = e.currentTarget.innerHTML.toLowerCase();
 		if (directionChange === "left") {
 			directionIndex = (directionIndex + 3) % 4;
@@ -102,7 +104,7 @@ const App = () => {
 				direction,
 			} = robotLocation;
 			toggling();
-			setModalText(`Robot is located at ${x},${y} and is facing ${direction?.toUpperCase()}`);
+			setModalText(`Robot is located at ${x},${y} and is facing ${direction.toUpperCase()}`);
 		}
 	};
 	const showInstructions = () => {
@@ -115,13 +117,13 @@ const App = () => {
 			<div className="app-container">
 				<Table robotLocation={robotLocation} setRobotLocation={setRobotLocation} />
 				<div>
-					<Robot image={getRobotDirectionImage() || robot_s} x={robotLocation?.left} y={robotLocation?.top} />
+					<Robot image={getRobotDirectionImage()} x={robotLocation.left} y={robotLocation.top} location={robotLocation.location || null} />
 					<div className="buttons-container">
+						<Button onClick={showInstructions} text="Instructions" />
 						<Button onClick={handleMove} text="Move" />
 						<Button onClick={(e) => handleChangeDirections(e)} text="Left" />
 						<Button onClick={(e) => handleChangeDirections(e)} text="Right" />
 						<Button onClick={handleReport} text="Report" />
-						<Button onClick={showInstructions} text="Instructions" />
 					</div>
 					{isOpen && <Modal toggling={toggling} content={modalText} />}
 				</div>

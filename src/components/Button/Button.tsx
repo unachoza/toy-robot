@@ -1,7 +1,9 @@
+import { MouseEventHandler } from "react";
 import "./Button.css";
+
 export interface PropsButton {
 	text: string;
-	onClick: React.MouseEventHandler<HTMLButtonElement>;
+	onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
 const Button = ({ text, onClick }: PropsButton): JSX.Element => {
