@@ -9,12 +9,13 @@ import robot_nw from "./assets/robot_nw.png";
 import robot_se from "./assets/robot_se.png";
 import { INSTRUCTIONS } from "./utils/constants";
 import { Direction, RobotLocation } from "./utils/types";
+import useScreenSize from "./utils/useScreenSize";
 import "./App.css";
 
-const INITIAL_ROBOTLOCATION = {
+export const INITIAL_ROBOTLOCATION = {
 	direction: "north" as Direction,
 	location: null,
-	left: 40,
+	left: 50,
 	top: 10,
 };
 
@@ -29,14 +30,31 @@ const App = () => {
 	const [robotLocation, setRobotLocation] = useState<RobotLocation>({ ...INITIAL_ROBOTLOCATION });
 	const [isOpen, setIsOpen] = useState(false);
 	const [modalText, setModalText] = useState<string>("");
+	const { screenSize, handleResize } = useScreenSize(setRobotLocation);
+	const [squarePxSize, setSquarePxSize] = useState(120);
 	const toggling = () => setIsOpen(!isOpen);
 	const directions = ["north", "east", "south", "west"];
 	const tableSize = 5;
-	const squarePxSize = 120;
 
 	useEffect(() => {
 		getRobotDirectionImage();
 	}, [robotLocation.direction]);
+
+	// TODO, Fix how to get initial screensize to set initial squarepxSize, currently only getting screensize if resizing
+	useEffect(() => {
+		handleResize();
+		switch (screenSize) {
+			case "L":
+				setSquarePxSize(120);
+				break;
+			case "M":
+				setSquarePxSize(90);
+				break;
+			case "S":
+				setSquarePxSize(70);
+				break;
+		}
+	}, [screenSize]);
 
 	const getRobotDirectionImage = () => {
 		return robotDirectionImages[robotLocation.direction];
@@ -113,7 +131,8 @@ const App = () => {
 		toggling();
 		setModalText(INSTRUCTIONS);
 	};
-
+	console.log({ robotLocation });
+	console.log({ squarePxSize });
 	return (
 		<>
 			<div className="app-container">
