@@ -3,11 +3,7 @@ import Table from "./components/Table/Table";
 import Button from "./components/Button/Button";
 import Robot from "./components/Robot/Robot";
 import Modal from "./components/Modal/Modal";
-import robot_s from "./assets/robot_s.png";
-import robot_n from "./assets/robot_n.png";
-import robot_nw from "./assets/robot_nw.png";
-import robot_se from "./assets/robot_se.png";
-import { INSTRUCTIONS } from "./utils/constants";
+import { INSTRUCTIONS, ROBOT_IMAGE_DIRECTIONS } from "./utils/constants";
 import { Direction, RobotLocation } from "./utils/types";
 import useScreenSize from "./utils/useScreenSize";
 import "./App.css";
@@ -19,22 +15,16 @@ export const INITIAL_ROBOTLOCATION = {
 	top: 10,
 };
 
-const robotDirectionImages = {
-	north: robot_n,
-	south: robot_s,
-	west: robot_nw,
-	east: robot_se,
-};
-
 const App = () => {
 	const [robotLocation, setRobotLocation] = useState<RobotLocation>({ ...INITIAL_ROBOTLOCATION });
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [modalText, setModalText] = useState<string>("");
 	const { screenSize, handleResize } = useScreenSize(setRobotLocation);
-	const [squarePxSize, setSquarePxSize] = useState(120);
+	const [squarePxSize, setSquarePxSize] = useState<number>(120);
+
 	const toggling = () => setIsOpen(!isOpen);
-	const directions = ["north", "east", "south", "west"];
-	const tableSize = 5;
+	const directions: Direction[] = ["north", "east", "south", "west"];
+	const tableSize: number = 5;
 
 	useEffect(() => {
 		getRobotDirectionImage();
@@ -56,7 +46,7 @@ const App = () => {
 	}, [screenSize]);
 
 	const getRobotDirectionImage = () => {
-		return robotDirectionImages[robotLocation.direction];
+		return ROBOT_IMAGE_DIRECTIONS[robotLocation.direction];
 	};
 
 	const isValidMove = (x: number, y: number): boolean => {
@@ -102,7 +92,7 @@ const App = () => {
 
 	const handleChangeDirections = (e: MouseEvent<HTMLElement>) => {
 		if (robotLocation.location) {
-			let directionIndex: number = directions.indexOf(robotLocation.direction as string);
+			let directionIndex: number = directions.indexOf(robotLocation.direction);
 			let directionChange = e.currentTarget.innerHTML.toLowerCase();
 			if (directionChange === "left") {
 				directionIndex = (directionIndex + 3) % 4;

@@ -1,3 +1,15 @@
+import robot_s from "../assets/robot_s.png";
+import robot_n from "../assets/robot_n.png";
+import robot_nw from "../assets/robot_nw.png";
+import robot_se from "../assets/robot_se.png";
+
+export const ROBOT_IMAGE_DIRECTIONS = {
+	north: robot_n,
+	south: robot_s,
+	west: robot_nw,
+	east: robot_se,
+};
+
 export const INSTRUCTIONS = `
 ## Description
 
