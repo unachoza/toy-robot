@@ -1,8 +1,8 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
-import { INITIAL_ROBOTLOCATION } from "../App";
-import { RobotLocation } from "./types";
+import { INITIAL_ROBOT_STATE } from "../App";
+import { RobotState } from "./types";
 
-const useScreenSize = (setRobotlocation: Dispatch<SetStateAction<RobotLocation>>) => {
+const useScreenSize = (setRobotState: Dispatch<SetStateAction<RobotState>>) => {
 	const [screenSize, setScreenSize] = useState("L");
 
 	useEffect(() => {
@@ -21,7 +21,7 @@ const useScreenSize = (setRobotlocation: Dispatch<SetStateAction<RobotLocation>>
 		} else if (window.innerWidth < 667) {
 			setScreenSize("S");
 		}
-		setRobotlocation(INITIAL_ROBOTLOCATION);
+		setRobotState(INITIAL_ROBOT_STATE);
 	};
 
 	return { screenSize, handleResize };

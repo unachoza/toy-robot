@@ -4,11 +4,9 @@
 	padding: 2rem;
 }
 
-.logo:hover {
-	filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-	filter: drop-shadow(0 0 2em #61dafbaa);
+h1 {
+	margin-left: 20px;
+	font-family: "dM sans", sans-serif;
 }
 
 .app-container {

@@ -1,7 +1,7 @@
-import robot_s from "../assets/robot_s.png";
-import robot_n from "../assets/robot_n.png";
-import robot_nw from "../assets/robot_nw.png";
-import robot_se from "../assets/robot_se.png";
+import robot_s from "../assets/robot_images/robot_s.png";
+import robot_n from "../assets/robot_images/robot_n.png";
+import robot_nw from "../assets/robot_images/robot_nw.png";
+import robot_se from "../assets/robot_images/robot_se.png";
 
 export const ROBOT_IMAGE_DIRECTIONS = {
 	north: robot_n,

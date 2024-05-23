@@ -1,21 +1,18 @@
 import { Dispatch, MouseEvent, SetStateAction } from "react";
 import "./Table.css";
-import { RobotLocation } from "../../utils/types";
+import { RobotState } from "../../utils/types";
 
 interface TableProps {
-	robotLocation: RobotLocation;
-	setRobotLocation: Dispatch<SetStateAction<RobotLocation>>;
+	robotState: RobotState;
+	setRobotState: Dispatch<SetStateAction<RobotState>>;
 }
 
-const Table = ({ robotLocation, setRobotLocation }: TableProps) => {
+const Table = ({ setRobotState }: TableProps) => {
 	const getSquareLocationOnBrowswer = (e: MouseEvent, xPosition: number, yPosition: number) => {
 		const { x, y } = e.currentTarget.getBoundingClientRect();
-		/// QUESTION FOR ROHIRIUM : does every place command set the robot direct to north or just the initial?
-		setRobotLocation({ ...robotLocation, direction: "north", location: { x: xPosition, y: yPosition }, left: x, top: y });
+		setRobotState({ direction: "north", location: { x: xPosition, y: yPosition }, left: x, top: y });
 	};
 
-	/// QUESTION FOR REVIWER : is there a way to call createboard on a ref,
-	// so it doesn't re render on every click
 	const createBoard = (rows: number, col: number) => {
 		let array2D = [];
 		for (let i = 0; i < rows; i++) {

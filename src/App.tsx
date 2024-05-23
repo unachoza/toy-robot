@@ -4,11 +4,11 @@ import Button from "./components/Button/Button";
 import Robot from "./components/Robot/Robot";
 import Modal from "./components/Modal/Modal";
 import { INSTRUCTIONS, ROBOT_IMAGE_DIRECTIONS } from "./utils/constants";
-import { Direction, RobotLocation } from "./utils/types";
+import { Direction, RobotState } from "./utils/types";
 import useScreenSize from "./utils/useScreenSize";
 import "./App.css";
 
-export const INITIAL_ROBOTLOCATION = {
+export const INITIAL_ROBOT_STATE = {
 	direction: "south" as Direction,
 	location: null,
 	left: 50,
@@ -16,10 +16,10 @@ export const INITIAL_ROBOTLOCATION = {
 };
 
 const App = () => {
-	const [robotLocation, setRobotLocation] = useState<RobotLocation>({ ...INITIAL_ROBOTLOCATION });
+	const [robotState, setRobotState] = useState<RobotState>({ ...INITIAL_ROBOT_STATE });
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [modalText, setModalText] = useState<string>("");
-	const { screenSize, handleResize } = useScreenSize(setRobotLocation);
+	const { screenSize, handleResize } = useScreenSize(setRobotState);
 	const [squarePxSize, setSquarePxSize] = useState<number>(120);
 
 	const toggling = () => setIsOpen(!isOpen);
@@ -28,7 +28,7 @@ const App = () => {
 
 	useEffect(() => {
 		getRobotDirectionImage();
-	}, [robotLocation.direction]);
+	}, [robotState.direction]);
 
 	useEffect(() => {
 		handleResize();
@@ -46,7 +46,7 @@ const App = () => {
 	}, [screenSize]);
 
 	const getRobotDirectionImage = () => {
-		return ROBOT_IMAGE_DIRECTIONS[robotLocation.direction];
+		return ROBOT_IMAGE_DIRECTIONS[robotState.direction];
 	};
 
 	const isValidMove = (x: number, y: number): boolean => {
@@ -54,13 +54,13 @@ const App = () => {
 	};
 
 	const handleMove = () => {
-		if (robotLocation?.location) {
+		if (robotState?.location) {
 			let {
 				location: { x, y },
 				direction,
 				top,
 				left,
-			} = robotLocation;
+			} = robotState;
 			switch (direction) {
 				case "north":
 					y += 1;
@@ -80,8 +80,8 @@ const App = () => {
 					break;
 			}
 			if (isValidMove(x, y)) {
-				setRobotLocation({
-					...robotLocation,
+				setRobotState({
+					...robotState,
 					location: { x, y },
 					left,
 					top,
@@ -91,27 +91,27 @@ const App = () => {
 	};
 
 	const handleChangeDirections = (e: MouseEvent<HTMLElement>) => {
-		if (robotLocation.location) {
-			let directionIndex: number = directions.indexOf(robotLocation.direction);
+		if (robotState.location) {
+			let directionIndex: number = directions.indexOf(robotState.direction);
 			let directionChange = e.currentTarget.innerHTML.toLowerCase();
 			if (directionChange === "left") {
 				directionIndex = (directionIndex + 3) % 4;
 			} else if (directionChange === "right") {
 				directionIndex = (directionIndex + 1) % 4;
 			}
-			setRobotLocation((prevRobotLocation) => ({
-				...prevRobotLocation,
+			setRobotState((prevRobotState) => ({
+				...prevRobotState,
 				direction: directions[directionIndex] as Direction,
 			}));
 		}
 	};
 
 	const handleReport = () => {
-		if (robotLocation?.location) {
+		if (robotState?.location) {
 			const {
 				location: { x, y },
 				direction,
-			} = robotLocation;
+			} = robotState;
 			toggling();
 			setModalText(`Robot is located at ${x},${y} and is facing ${direction.toUpperCase()}`);
 		}
@@ -121,20 +121,23 @@ const App = () => {
 		setModalText(INSTRUCTIONS);
 	};
 	return (
-		<div className="app-container">
-			<Table robotLocation={robotLocation} setRobotLocation={setRobotLocation} />
-			<div>
-				<Robot image={getRobotDirectionImage()} x={robotLocation.left} y={robotLocation.top} location={robotLocation.location || null} />
-				<div className="buttons-container">
-					<Button onClick={showInstructions} text="Instructions" />
-					<Button onClick={handleMove} text="Move" />
-					<Button onClick={(e) => handleChangeDirections(e)} text="Left" />
-					<Button onClick={(e) => handleChangeDirections(e)} text="Right" />
-					<Button onClick={handleReport} text="Report" />
+		<>
+			<h1 className="title">Toy Robot Simulator</h1>
+			<div className="app-container">
+				<Table robotState={robotState} setRobotState={setRobotState} />
+				<div>
+					<Robot image={getRobotDirectionImage()} x={robotState.left} y={robotState.top} location={robotState.location || null} />
+					<div className="buttons-container">
+						<Button onClick={showInstructions} text="Instructions" />
+						<Button onClick={handleMove} text="Move" />
+						<Button onClick={(e) => handleChangeDirections(e)} text="Left" />
+						<Button onClick={(e) => handleChangeDirections(e)} text="Right" />
+						<Button onClick={handleReport} text="Report" />
+					</div>
+					{isOpen && <Modal toggling={toggling} content={modalText} />}
 				</div>
-				{isOpen && <Modal toggling={toggling} content={modalText} />}
 			</div>
-		</div>
+		</>
 	);
 };
 
