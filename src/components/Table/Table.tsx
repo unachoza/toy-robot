@@ -37,7 +37,11 @@ const Table = ({ robotLocation, setRobotLocation }: TableProps) => {
 		return array2D;
 	};
 
-	return <div className="table">{createBoard(5, 5)}</div>;
+	return (
+		<div className="table" data-testid="table">
+			{createBoard(5, 5)}
+		</div>
+	);
 };
 
 export default Table;

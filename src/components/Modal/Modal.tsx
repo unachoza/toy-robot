@@ -10,9 +10,9 @@ interface ModalProps {
 
 const Modal = ({ toggling, content }: ModalProps) => {
 	return (
-		<div className="modal-container show-modal" id="modal">
+		<div data-testid="modal" className="modal-container show-modal" id="modal">
 			<div className="modal">
-				<img src={close} className="close-icon" onClick={toggling} alt="close icon" />
+				<img src={close} className="close-icon" onClick={toggling} alt="close icon" data-testid="close-icon" />
 				{content?.length < 200 && <div className="modal-header">Report</div>}
 				<ReactMarkdown className="modal-content">{content}</ReactMarkdown>
 			</div>

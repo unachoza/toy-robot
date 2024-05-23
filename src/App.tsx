@@ -122,6 +122,7 @@ const App = () => {
 	};
 	return (
 		<div className="app-container">
+			planets here
 			<Table robotLocation={robotLocation} setRobotLocation={setRobotLocation} />
 			<div>
 				<Robot image={getRobotDirectionImage()} x={robotLocation.left} y={robotLocation.top} location={robotLocation.location || null} />
