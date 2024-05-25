@@ -1,11 +1,15 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Modal from "./Modal";
+import { MouseEventHandler } from "react";
 
 describe("Modal Component", () => {
-	const mockToggle = vi.fn();
+	let mockToggle: MouseEventHandler<HTMLImageElement>;
 	const shortContent = "This is a short content";
 	const longContent = "This is a very long content".repeat(20);
+	beforeEach(() => {
+		mockToggle = vi.fn();
+	});
 
 	test("renders the modal container", () => {
 		render(<Modal toggling={mockToggle} content={shortContent} />);
