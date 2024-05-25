@@ -124,7 +124,7 @@ const App = () => {
 		<>
 			<h1 className="title">Toy Robot Simulator</h1>
 			<div className="app-container">
-				<Table robotState={robotState} setRobotState={setRobotState} />
+				<Table setRobotState={setRobotState} />
 				<div>
 					<Robot image={getRobotDirectionImage()} x={robotState.left} y={robotState.top} location={robotState.location || null} />
 					<div className="buttons-container">

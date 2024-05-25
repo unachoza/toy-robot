@@ -1,6 +1,12 @@
 .table {
 	display: flex;
 }
+
+.table-row {
+	display: flex;
+	flex-direction: column-reverse;
+}
+
 .square {
 	height: 120px;
 	width: 120px;

@@ -1,40 +1,52 @@
-import { Dispatch, MouseEvent, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import "./Table.css";
 import { RobotState } from "../../utils/types";
 
 interface TableProps {
-	robotState: RobotState;
 	setRobotState: Dispatch<SetStateAction<RobotState>>;
 }
 
 const Table = ({ setRobotState }: TableProps) => {
-	const getSquareLocationOnBrowswer = (e: MouseEvent, xPosition: number, yPosition: number) => {
-		const { x, y } = e.currentTarget.getBoundingClientRect();
-		setRobotState({ direction: "north", location: { x: xPosition, y: yPosition }, left: x, top: y });
-	};
+	const tableRef = useRef<HTMLDivElement>(null);
 
-	const createBoard = (rows: number, col: number) => {
-		let array2D = [];
-		for (let i = 0; i < rows; i++) {
-			let tableRow = [];
-			for (let j = 0; j < col; j++) {
-				let index = [i, j];
-				tableRow.unshift(
-					<div key={`square +${index}`} className="square" onClick={(e: MouseEvent) => getSquareLocationOnBrowswer(e, i, j)}>
-						{index.toString()}
-					</div>
-				);
-			}
-			array2D.push(
-				<div key={i} className="table-row">
-					{tableRow}
-				</div>
-			);
+	useEffect(() => {
+		if (tableRef.current && tableRef.current.children.length === 0) {
+			const table = createBoard(5, 5);
+			tableRef.current.appendChild(table);
 		}
-		return array2D;
-	};
+	}, []);
 
-	return <div className="table">{createBoard(5, 5)}</div>;
+	function createSquare(i: number, j: number) {
+		const square = document.createElement("div");
+		square.className = "square";
+		square.innerText = `${i},${j}`;
+		square.addEventListener("click", (e) => getSquareLocationOnBrowswer(e, i, j));
+		return square;
+	}
+
+	function getSquareLocationOnBrowswer(e: globalThis.MouseEvent, xPosition: number, yPosition: number) {
+		const target = e.currentTarget as HTMLElement | null;
+		if (target) {
+			const { x, y } = target.getBoundingClientRect();
+			setRobotState({ direction: "north", location: { x: xPosition, y: yPosition }, left: x, top: y });
+		}
+	}
+
+	function createBoard(rows: number, col: number) {
+		const container = document.createElement("div");
+		container.className = "table";
+		for (let i = 0; i < rows; i++) {
+			const tableRow = document.createElement("div");
+			tableRow.className = "table-row";
+			for (let j = 0; j < col; j++) {
+				tableRow.appendChild(createSquare(i, j));
+			}
+			container.appendChild(tableRow);
+		}
+		return container;
+	}
+
+	return <div ref={tableRef} data-testid="table"></div>;
 };
 
 export default Table;
