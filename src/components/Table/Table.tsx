@@ -20,6 +20,7 @@ const Table = ({ setRobotState }: TableProps) => {
 		const square = document.createElement("div");
 		square.className = "square";
 		square.innerText = `${i},${j}`;
+		square.dataset.id = `${i},${j}`;
 		square.addEventListener("click", (e) => getSquareLocationOnBrowswer(e, i, j));
 		return square;
 	}
@@ -38,6 +39,7 @@ const Table = ({ setRobotState }: TableProps) => {
 		for (let i = 0; i < rows; i++) {
 			const tableRow = document.createElement("div");
 			tableRow.className = "table-row";
+			tableRow.dataset.row = `row-${i}`;
 			for (let j = 0; j < col; j++) {
 				tableRow.appendChild(createSquare(i, j));
 			}
