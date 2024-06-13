@@ -10,6 +10,8 @@ const Table = ({ setRobotState }: TableProps) => {
 	const tableRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		// set table to ref to improve performance eliminating rerender on every move
+		// isolating the board from the robot
 		if (tableRef.current && tableRef.current.children.length === 0) {
 			const table = createBoard(5, 5);
 			tableRef.current.appendChild(table);
@@ -25,6 +27,8 @@ const Table = ({ setRobotState }: TableProps) => {
 		return square;
 	}
 
+	// function to satisfy PLACE Command;
+	// derive location on table from mouse click
 	function getSquareLocationOnBrowswer(e: globalThis.MouseEvent, xPosition: number, yPosition: number) {
 		const target = e.currentTarget as HTMLElement | null;
 		if (target) {
