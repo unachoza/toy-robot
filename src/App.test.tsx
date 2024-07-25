@@ -1,8 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import App from "./App";
-import robot_s from "./assets/robot_images/robot_s.png";
-import robot_nw from "./assets/robot_images/robot_nw.png";
-import robot_se from "./assets/robot_images/robot_se.png";
 
 describe("App Component", () => {
 	test("renders the heading correctly", () => {

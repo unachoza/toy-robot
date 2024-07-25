@@ -122,12 +122,14 @@ const App = () => {
 	};
 	return (
 		<>
-			<h1 className="title">Toy Robot Simulator</h1>
+			<h1 className="title" data-testid="cypress-title">
+				Toy Robot Simulator
+			</h1>
 			<div className="app-container">
 				<Table setRobotState={setRobotState} />
 				<div>
 					<Robot image={getRobotDirectionImage()} x={robotState.left} y={robotState.top} location={robotState.location || null} />
-					<div className="buttons-container">
+					<div className="buttons-container" data-testid="buttons-container">
 						<Button onClick={showInstructions} text="Instructions" />
 						<Button onClick={handleMove} text="Move" />
 						<Button onClick={(e) => handleChangeDirections(e)} text="Left" />

@@ -17,6 +17,7 @@
 		"react-markdown": "^9.0.1"
 	},
 	"devDependencies": {
+		"@cypress/vite-dev-server": "^5.1.1",
 		"@testing-library/jest-dom": "^6.4.5",
 		"@testing-library/react": "^15.0.7",
 		"@types/react": "^18.2.66",
@@ -25,6 +26,7 @@
 		"@typescript-eslint/parser": "^7.2.0",
 		"@vitejs/plugin-react": "^4.2.1",
 		"@vitest/ui": "^1.6.0",
+		"cypress": "^13.13.1",
 		"eslint": "^8.57.0",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"eslint-plugin-react-refresh": "^0.4.6",

@@ -11,6 +11,7 @@ interface RobotProps {
 const Robot = ({ image, x, y, location }: RobotProps) => {
 	return (
 		<img
+			data-testid="robot-test"
 			src={image}
 			className="robot"
 			alt="toy robot"
